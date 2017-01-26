@@ -72,7 +72,12 @@ Pool.prototype._create = function (cb) {
     } else {
       this.log('client connected')
       this.emit('connect', client)
-      cb(null, client)
+
+      if (this.options.connectionSetup && typeof this.options.connectionSetup == 'function') {
+        this.options.connectionSetup(client, cb)
+      } else {
+        cb(null, client)
+      }
     }
   }.bind(this))
 }
